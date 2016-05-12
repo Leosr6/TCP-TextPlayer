@@ -1,0 +1,4 @@
+new ShortMessage(ShortMessage.NOTE_ON, NOTA (0-127), VOLUME (0-127))
+new ShortMessage(ShortMessage.PROGRAM_CHANGE, INSTRUMENTO, NADA)
+
+new MidiEvent(SHORT MESSAGE, DELAY)

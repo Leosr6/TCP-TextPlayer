@@ -17,9 +17,9 @@ public class TextPlayer {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws MidiUnavailableException, InterruptedException {
+    public static void main(String[] args) throws MidiUnavailableException, InterruptedException, InvalidMidiDataException {
         
-        Synthesizer synth = MidiSystem.getSynthesizer();
+        /*Synthesizer synth = MidiSystem.getSynthesizer();
         int instrumentNumber;
         synth.open();
         MidiChannel ch = synth.getChannels()[0];
@@ -33,11 +33,26 @@ public class TextPlayer {
             ch.noteOn(60, 50); // 0 à 127
             Thread.sleep(2000);
             ch.noteOff(60);
+        }*/
+        
+        Synthesizer synth = MidiSystem.getSynthesizer();
+        synth.open();
+        Sequencer sequencer = MidiSystem.getSequencer();
+        sequencer.open();
+        Sequence sequence = new Sequence(Sequence.PPQ, 4);
+        Track newTrack = sequence.createTrack();
+        int ticks = 0;
+        
+        for (Instrument instrument:synth.getLoadedInstruments())
+        {
+            newTrack.add(new MidiEvent(new ShortMessage(ShortMessage.PROGRAM_CHANGE, instrument.getPatch().getProgram(), 0), ticks));
+            newTrack.add(new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, 60, 63), ticks));
+            ticks+= 16;
+            newTrack.add(new MidiEvent(new ShortMessage(ShortMessage.NOTE_OFF, 60, 0), ticks));
         }
-       
-        
-        
-        
+
+        sequencer.setSequence(sequence);
+        sequencer.start();
     }
     
 }
