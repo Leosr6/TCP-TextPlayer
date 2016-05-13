@@ -38,9 +38,9 @@ public class MainFrame extends javax.swing.JFrame {
         button4 = new java.awt.Button();
         Texto1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jList1 = new javax.swing.JList<String>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jList2 = new javax.swing.JList<String>();
         jMenuBar1 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         LoadFileMenu = new javax.swing.JMenuItem();
@@ -62,10 +62,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTextArea1.setWrapStyleWord(true);
 
-        PlayButton.setText("Play");
+        PlayButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png"))); // NOI18N
         PlayButton.setPreferredSize(new java.awt.Dimension(120, 30));
+        PlayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PlayButtonActionPerformed(evt);
+            }
+        });
 
-        StopButton.setText("Stop");
+        StopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/stopicon.png"))); // NOI18N
         StopButton.setPreferredSize(new java.awt.Dimension(120, 30));
 
         button1.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -172,24 +177,20 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(PlayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(66, 66, 66))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane3)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(26, 26, 26))))
+                            .addComponent(jScrollPane3)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
-                                .addComponent(jScrollPane2)))
+                                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(12, 12, 12))))
         );
 
@@ -211,6 +212,10 @@ public class MainFrame extends javax.swing.JFrame {
         String displayedText = jTextArea1.getText();
         FileManager.saveToFile(displayedText);
     }//GEN-LAST:event_SaveTxtMenuActionPerformed
+
+    private void PlayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PlayButtonActionPerformed
 
     //Sets the text on jTextArea1
     private void displayText(List<String> text)
