@@ -32,7 +32,7 @@ public class FileManager {
         if (chosen == JFileChooser.APPROVE_OPTION)
         {
             handler = chooser.getSelectedFile();
-            return load();
+            return read();
         }    
         return null;
     }
@@ -48,7 +48,7 @@ public class FileManager {
             //appends '.txt' to the selected file name.
             if (!handler.exists()) 
                 handler = new File(chooser.getSelectedFile() + ".txt");
-            boolean success = save(content);
+            boolean success = write(content);
             if (success)
             {
                 JOptionPane.showMessageDialog(null,
@@ -64,7 +64,7 @@ public class FileManager {
         }    
     }
     
-    private static List<String> load() 
+    private static List<String> read() 
     {
         List<String> text = new ArrayList<String>();
         String line;
@@ -85,7 +85,7 @@ public class FileManager {
         }
     }
     
-    private static boolean save(String content)
+    private static boolean write(String content)
     {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(handler)))
         {
