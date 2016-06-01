@@ -38,9 +38,9 @@ public class MainFrame extends javax.swing.JFrame {
         button4 = new java.awt.Button();
         Texto1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<String>();
+        jList1 = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<String>();
+        jList2 = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         LoadFileMenu = new javax.swing.JMenuItem();
@@ -72,6 +72,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         StopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/stopicon.png"))); // NOI18N
         StopButton.setPreferredSize(new java.awt.Dimension(120, 30));
+        StopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StopButtonActionPerformed(evt);
+            }
+        });
 
         button1.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         button1.setLabel(">");
@@ -214,8 +219,30 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_SaveTxtMenuActionPerformed
 
     private void PlayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayButtonActionPerformed
-        // TODO add your handling code here:
+        
+        /* 
+            TO DO: 
+                - chamada pra classe Player
+        */
+        
+        //Player.setMusic();
+        //Player.play();
+        
+        jTextArea1.setEditable(false);
+        
     }//GEN-LAST:event_PlayButtonActionPerformed
+
+    private void StopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopButtonActionPerformed
+        
+        /*
+            TO DO:
+                - chamada pra classe Player
+        */
+        
+        //Player.stop();
+        
+        jTextArea1.setEditable(true);
+    }//GEN-LAST:event_StopButtonActionPerformed
 
     //Sets the text on jTextArea1
     private void displayText(List<String> text)
