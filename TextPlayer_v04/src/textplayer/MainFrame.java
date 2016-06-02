@@ -5,6 +5,8 @@
  */
 package textplayer;
 import java.util.List;
+import java.util.NoSuchElementException;
+import javax.swing.DefaultListModel;
 /**
  *
  * @author Günter Hertz
@@ -14,7 +16,10 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
+    List<String> instruments;
+    
+    public MainFrame(List<String> instrumentlist) {
+        instruments = instrumentlist;
         initComponents();
     }
 
@@ -29,19 +34,21 @@ public class MainFrame extends javax.swing.JFrame {
 
         jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        PlayButton = new javax.swing.JButton();
-        StopButton = new javax.swing.JButton();
-        button1 = new java.awt.Button();
-        button2 = new java.awt.Button();
-        button3 = new java.awt.Button();
-        button4 = new java.awt.Button();
-        Texto1 = new javax.swing.JLabel();
+        textArea = new javax.swing.JTextArea();
+        playButton = new javax.swing.JButton();
+        stopButton = new javax.swing.JButton();
+        addInstrumentButton = new java.awt.Button();
+        addAllInstrumentsButton = new java.awt.Button();
+        removeAllInstrumentsButton = new java.awt.Button();
+        removeInstrumentButton = new java.awt.Button();
+        textAreaLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        availableInstruments = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        usedInstruments = new javax.swing.JList<>();
+        availableInstrumentsLabel = new javax.swing.JLabel();
+        usedInstrumentsLabel = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         LoadFileMenu = new javax.swing.JMenuItem();
         SaveTxtMenu = new javax.swing.JMenuItem();
@@ -54,52 +61,82 @@ public class MainFrame extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(748, 600));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Verdana", 0, 13)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-        jTextArea1.setLineWrap(true);
+        textArea.setColumns(20);
+        textArea.setFont(new java.awt.Font("Verdana", 0, 13)); // NOI18N
+        textArea.setRows(5);
+        jScrollPane1.setViewportView(textArea);
+        textArea.setLineWrap(true);
 
-        jTextArea1.setWrapStyleWord(true);
+        textArea.setWrapStyleWord(true);
 
-        PlayButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png"))); // NOI18N
-        PlayButton.setPreferredSize(new java.awt.Dimension(120, 30));
-        PlayButton.addActionListener(new java.awt.event.ActionListener() {
+        playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png"))); // NOI18N
+        playButton.setPreferredSize(new java.awt.Dimension(120, 30));
+        playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PlayButtonActionPerformed(evt);
+                playButtonActionPerformed(evt);
             }
         });
 
-        StopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/stopicon.png"))); // NOI18N
-        StopButton.setPreferredSize(new java.awt.Dimension(120, 30));
-        StopButton.addActionListener(new java.awt.event.ActionListener() {
+        stopButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/stopicon.png"))); // NOI18N
+        stopButton.setPreferredSize(new java.awt.Dimension(120, 30));
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StopButtonActionPerformed(evt);
+                stopButtonActionPerformed(evt);
             }
         });
 
-        button1.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        button1.setLabel(">");
-        button1.setPreferredSize(new java.awt.Dimension(100, 30));
+        addInstrumentButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        addInstrumentButton.setLabel(">");
+        addInstrumentButton.setPreferredSize(new java.awt.Dimension(100, 30));
+        addInstrumentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addInstrumentButtonActionPerformed(evt);
+            }
+        });
 
-        button2.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        button2.setLabel(">>");
-        button2.setPreferredSize(new java.awt.Dimension(100, 30));
+        addAllInstrumentsButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        addAllInstrumentsButton.setLabel(">>");
+        addAllInstrumentsButton.setPreferredSize(new java.awt.Dimension(100, 30));
+        addAllInstrumentsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAllInstrumentsButtonActionPerformed(evt);
+            }
+        });
 
-        button3.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        button3.setLabel("<<");
-        button3.setPreferredSize(new java.awt.Dimension(100, 30));
+        removeAllInstrumentsButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        removeAllInstrumentsButton.setLabel("<<");
+        removeAllInstrumentsButton.setPreferredSize(new java.awt.Dimension(100, 30));
+        removeAllInstrumentsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAllInstrumentsButtonActionPerformed(evt);
+            }
+        });
 
-        button4.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        button4.setLabel("<");
-        button4.setPreferredSize(new java.awt.Dimension(100, 30));
+        removeInstrumentButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        removeInstrumentButton.setLabel("<");
+        removeInstrumentButton.setPreferredSize(new java.awt.Dimension(100, 30));
+        removeInstrumentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeInstrumentButtonActionPerformed(evt);
+            }
+        });
 
-        Texto1.setText("Text to be played:");
+        textAreaLabel.setText("Text to be played:");
 
-        jList1.setPreferredSize(new java.awt.Dimension(40, 80));
-        jScrollPane2.setViewportView(jList1);
+        availableInstruments.setPreferredSize(new java.awt.Dimension(40, 80));
+        jScrollPane2.setViewportView(availableInstruments);
+        DefaultListModel availableModel = new DefaultListModel();
+        for (String s : instruments)
+        availableModel.addElement(s);
+        availableInstruments.setModel(availableModel);
 
-        jScrollPane3.setViewportView(jList2);
+        jScrollPane3.setViewportView(usedInstruments);
+        DefaultListModel usedModel = new DefaultListModel();
+        usedInstruments.setModel(usedModel);
+
+        availableInstrumentsLabel.setText("Available Instruments");
+
+        usedInstrumentsLabel.setText("Used Instruments");
 
         FileMenu.setText("File");
 
@@ -125,7 +162,7 @@ public class MainFrame extends javax.swing.JFrame {
         SaveMidiMenu.setText("Save MIDI");
         FileMenu.add(SaveMidiMenu);
 
-        jMenuBar1.add(FileMenu);
+        menuBar.add(FileMenu);
 
         HelpMenu.setText("Help");
 
@@ -137,9 +174,9 @@ public class MainFrame extends javax.swing.JFrame {
         });
         HelpMenu.add(jMenuItem4);
 
-        jMenuBar1.add(HelpMenu);
+        menuBar.add(HelpMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,56 +184,65 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Texto1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textAreaLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(PlayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(StopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(removeAllInstrumentsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(removeInstrumentButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addAllInstrumentsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addInstrumentButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(availableInstrumentsLabel))
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(button3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(button1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)))
+                            .addComponent(usedInstrumentsLabel)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Texto1)
+                .addComponent(textAreaLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(StopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PlayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(66, 66, 66))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                            .addComponent(availableInstrumentsLabel)
+                            .addComponent(usedInstrumentsLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 28, Short.MAX_VALUE)
+                                .addComponent(addInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
-                                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(addAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
-                                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(removeAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
-                                .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(removeInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(12, 12, 12))))
+                        .addGap(12, 12, 12))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -214,25 +260,29 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_LoadFileMenuActionPerformed
 
     private void SaveTxtMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveTxtMenuActionPerformed
-        String displayedText = jTextArea1.getText();
+        String displayedText = textArea.getText();
         FileManager.saveToFile(displayedText);
     }//GEN-LAST:event_SaveTxtMenuActionPerformed
 
-    private void PlayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayButtonActionPerformed
+    private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         
         /* 
             TO DO: 
-                - chamada pra classe Player
+                - fazer tratamento da String song com os /n?
         */
+        textArea.setEditable(false);
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        List<String> instruments = ListModelManipulation.toString(used);
         
-        //Player.setMusic();
-        //Player.play();
+        String song = textArea.getText();
         
-        jTextArea1.setEditable(false);
-        
-    }//GEN-LAST:event_PlayButtonActionPerformed
+        Player player = new Player(instruments, song);
 
-    private void StopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopButtonActionPerformed
+        player.playSong();
+        
+    }//GEN-LAST:event_playButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopButtonActionPerformed
         
         /*
             TO DO:
@@ -241,8 +291,62 @@ public class MainFrame extends javax.swing.JFrame {
         
         //Player.stop();
         
-        jTextArea1.setEditable(true);
+        
+        
+        textArea.setEditable(true);
     }//GEN-LAST:event_StopButtonActionPerformed
+
+    private void addInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInstrumentButtonActionPerformed
+
+        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();       
+
+        String selectedInstrument = availableInstruments.getSelectedValue(); 
+        List<DefaultListModel> updatedModels;
+        updatedModels = ListModelManipulation.moveElement(available, used, selectedInstrument);
+        
+        availableInstruments.setModel(updatedModels.get(0));
+        usedInstruments.setModel(updatedModels.get(1));
+        
+    }//GEN-LAST:event_addInstrumentButtonActionPerformed
+
+    private void addAllInstrumentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAllInstrumentsButtonActionPerformed
+        
+        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        
+        List<DefaultListModel> updatedModels;
+        updatedModels = ListModelManipulation.moveAllElements(available, used);
+        
+        availableInstruments.setModel(updatedModels.get(0));
+        usedInstruments.setModel(updatedModels.get(1));
+        
+    }//GEN-LAST:event_addAllInstrumentsButtonActionPerformed
+
+    private void removeAllInstrumentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllInstrumentsButtonActionPerformed
+        
+        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        
+        List<DefaultListModel> updatedModels;
+        updatedModels = ListModelManipulation.moveAllElements(used, available);
+        
+        availableInstruments.setModel(updatedModels.get(1));
+        usedInstruments.setModel(updatedModels.get(0));
+    }//GEN-LAST:event_removeAllInstrumentsButtonActionPerformed
+
+    private void removeInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeInstrumentButtonActionPerformed
+        // TODO add your handling code here:
+        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        
+        String selectedInstrument = usedInstruments.getSelectedValue(); 
+        List<DefaultListModel> updatedModels;
+        updatedModels = ListModelManipulation.moveElement(used, available, selectedInstrument);
+        
+        availableInstruments.setModel(updatedModels.get(1));
+        usedInstruments.setModel(updatedModels.get(0));
+    }//GEN-LAST:event_removeInstrumentButtonActionPerformed
 
     //Sets the text on jTextArea1
     private void displayText(List<String> text)
@@ -250,70 +354,38 @@ public class MainFrame extends javax.swing.JFrame {
         if (!text.isEmpty())
         {
             int i;
-            jTextArea1.setText(null); //clear the existing text
+            textArea.setText(null); //clear the existing text
             for (i = 0; i < text.size()-1; i++)
             {
-                jTextArea1.append(text.get(i) + "\n");
+                textArea.append(text.get(i) + "\n");
             }
-            jTextArea1.append(text.get(i));
+            textArea.append(text.get(i));
         }
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenu HelpMenu;
     private javax.swing.JMenuItem LoadFileMenu;
-    private javax.swing.JButton PlayButton;
     private javax.swing.JMenuItem SaveMidiMenu;
     private javax.swing.JMenuItem SaveTxtMenu;
-    private javax.swing.JButton StopButton;
-    private javax.swing.JLabel Texto1;
-    private java.awt.Button button1;
-    private java.awt.Button button2;
-    private java.awt.Button button3;
-    private java.awt.Button button4;
+    private java.awt.Button addAllInstrumentsButton;
+    private java.awt.Button addInstrumentButton;
+    private javax.swing.JList<String> availableInstruments;
+    private javax.swing.JLabel availableInstrumentsLabel;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JButton playButton;
+    private java.awt.Button removeAllInstrumentsButton;
+    private java.awt.Button removeInstrumentButton;
+    private javax.swing.JButton stopButton;
+    private javax.swing.JTextArea textArea;
+    private javax.swing.JLabel textAreaLabel;
+    private javax.swing.JList<String> usedInstruments;
+    private javax.swing.JLabel usedInstrumentsLabel;
     // End of variables declaration//GEN-END:variables
 }

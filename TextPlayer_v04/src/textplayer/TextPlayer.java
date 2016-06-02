@@ -5,6 +5,8 @@
  */
 package textplayer;
 
+import java.util.Arrays;
+import java.util.List;
 import javax.sound.midi.*;
 
 /**
@@ -59,7 +61,14 @@ public class TextPlayer {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
-            new MainFrame().setVisible(true);
+            
+            List<String> instruments = Arrays.asList(
+                    "Bass", 
+                    "Drums",
+                    "Guitar", 
+                    "Keyboard");
+            
+            new MainFrame(instruments).setVisible(true);
             }
         });
     }
