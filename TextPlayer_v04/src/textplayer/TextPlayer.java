@@ -61,12 +61,19 @@ public class TextPlayer {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
-            
+            //COLOCAR ESSA LISTA EM ORDEM ALFABETICA
             List<String> instruments = Arrays.asList(
                     "Bass", 
                     "Drums",
                     "Guitar", 
-                    "Keyboard");
+                    "Keyboard",
+                    "a",
+                    "a",
+                    "a",
+                    "a",
+                    "a",
+                    "a",
+                    "a","a","a");
             
             new MainFrame(instruments).setVisible(true);
             }

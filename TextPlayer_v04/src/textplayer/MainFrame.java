@@ -17,10 +17,12 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     List<String> instruments;
+    Player player;
     
     public MainFrame(List<String> instrumentlist) {
         instruments = instrumentlist;
         initComponents();
+        player = new Player(bpmLabel);
     }
 
     /**
@@ -48,6 +50,10 @@ public class MainFrame extends javax.swing.JFrame {
         usedInstruments = new javax.swing.JList<>();
         availableInstrumentsLabel = new javax.swing.JLabel();
         usedInstrumentsLabel = new javax.swing.JLabel();
+        bpmTitleLabel = new javax.swing.JLabel();
+        bpmLabel = new javax.swing.JLabel();
+        increaseBPM = new java.awt.Button();
+        lowerBPM = new java.awt.Button();
         menuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         LoadFileMenu = new javax.swing.JMenuItem();
@@ -138,6 +144,31 @@ public class MainFrame extends javax.swing.JFrame {
 
         usedInstrumentsLabel.setText("Used Instruments");
 
+        bpmTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        bpmTitleLabel.setText("BPM");
+
+        bpmLabel.setBackground(new java.awt.Color(255, 255, 255));
+        bpmLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        bpmLabel.setText("150");
+
+        increaseBPM.setActionCommand("+");
+        increaseBPM.setLabel("+");
+        increaseBPM.setName(""); // NOI18N
+        increaseBPM.setPreferredSize(new java.awt.Dimension(35, 35));
+        increaseBPM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                increaseBPMActionPerformed(evt);
+            }
+        });
+
+        lowerBPM.setLabel("-");
+        lowerBPM.setPreferredSize(new java.awt.Dimension(35, 35));
+        lowerBPM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lowerBPMActionPerformed(evt);
+            }
+        });
+
         FileMenu.setText("File");
 
         LoadFileMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -188,10 +219,20 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(textAreaLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(bpmTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                                        .addComponent(bpmLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(increaseBPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lowerBPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,6 +258,22 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(addAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(removeAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(removeInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -224,25 +281,18 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(usedInstrumentsLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 28, Short.MAX_VALUE)
-                                .addComponent(addInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(addAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(removeAllInstrumentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(removeInstrumentButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(12, 12, 12))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bpmTitleLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bpmLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(increaseBPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lowerBPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -270,30 +320,45 @@ public class MainFrame extends javax.swing.JFrame {
             TO DO: 
                 - fazer tratamento da String song com os /n?
         */
-        textArea.setEditable(false);
-        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
-        List<String> instruments = ListModelManipulation.toString(used);
         
-        String song = textArea.getText();
+        //"First time" playing => set and play song
+        if (player.isPaused() == false && player.isPlaying() == false)     
+        {
+            textArea.setEditable(false);
+            playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
         
-        Player player = new Player(instruments, song);
+            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+            List<String> instruments = ListModelManipulation.toString(used);
+        
+            String song = textArea.getText();
+        
+            player.setInstruments(instruments);
+            player.setSong(song);
 
-        player.playSong();
+            player.play();
+        }
         
+        //Player is paused => resume song
+        else if (player.isPaused() == true)
+        {
+            playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
+            player.resume();
+        }
+        
+        //Player is playing => pause song
+        else if (player.isPlaying() == true) 
+        {
+            playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png")));
+            player.pause();
+        }
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopButtonActionPerformed
         
-        /*
-            TO DO:
-                - chamada pra classe Player
-        */
-        
-        //Player.stop();
-        
-        
-        
+        playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png")));
         textArea.setEditable(true);
+        player.stop();
+           
     }//GEN-LAST:event_StopButtonActionPerformed
 
     private void addInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInstrumentButtonActionPerformed
@@ -336,7 +401,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAllInstrumentsButtonActionPerformed
 
     private void removeInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeInstrumentButtonActionPerformed
-        // TODO add your handling code here:
         DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
         DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
         
@@ -347,6 +411,24 @@ public class MainFrame extends javax.swing.JFrame {
         availableInstruments.setModel(updatedModels.get(1));
         usedInstruments.setModel(updatedModels.get(0));
     }//GEN-LAST:event_removeInstrumentButtonActionPerformed
+
+    private void increaseBPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseBPMActionPerformed
+        if (player.isPlaying() == false)
+            player.increaseBPM(5); 
+        /*
+            TO DO:
+                alterar BPM pelo botão enquanto a música é tocada?
+        */
+    }//GEN-LAST:event_increaseBPMActionPerformed
+
+    private void lowerBPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowerBPMActionPerformed
+        if (player.isPlaying() == false)
+            player.decreaseBPM(5);
+        /*
+            TO DO:
+                alterar BPM pelo botão enquanto a música é tocada?
+        */
+    }//GEN-LAST:event_lowerBPMActionPerformed
 
     //Sets the text on jTextArea1
     private void displayText(List<String> text)
@@ -373,11 +455,15 @@ public class MainFrame extends javax.swing.JFrame {
     private java.awt.Button addInstrumentButton;
     private javax.swing.JList<String> availableInstruments;
     private javax.swing.JLabel availableInstrumentsLabel;
+    private javax.swing.JLabel bpmLabel;
+    private javax.swing.JLabel bpmTitleLabel;
+    private java.awt.Button increaseBPM;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private java.awt.Button lowerBPM;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton playButton;
     private java.awt.Button removeAllInstrumentsButton;
