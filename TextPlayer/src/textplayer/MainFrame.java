@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.swing.DefaultListModel;
@@ -26,8 +27,8 @@ public class MainFrame extends javax.swing.JFrame {
     private final static int bpmChangeAmount = 5;
     private final static int defaultBPM = 120;
     
-    public MainFrame(List<String> instrumentlist) {
-        instruments = instrumentlist;
+    public MainFrame() throws MidiUnavailableException {
+        instruments = InstrumentList.get();
         initComponents();
         player = new Player();
     }
@@ -136,7 +137,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         textAreaLabel.setText("Text to be played:");
 
-        availableInstruments.setPreferredSize(new java.awt.Dimension(40, 80));
         jScrollPane2.setViewportView(availableInstruments);
         DefaultListModel availableModel = new DefaultListModel();
         for (String s : instruments)
@@ -298,7 +298,7 @@ public class MainFrame extends javax.swing.JFrame {
                                     .addComponent(lowerBPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))))
                 .addGap(12, 12, 12))
         );
 
@@ -332,8 +332,6 @@ public class MainFrame extends javax.swing.JFrame {
             
             setPlayer();
             runPlayer();
-            
-            System.out.println(player.getStatus());
         }
         
         //If player is paused, then resume

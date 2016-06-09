@@ -7,6 +7,8 @@ package textplayer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.*;
 
 /**
@@ -61,21 +63,11 @@ public class TextPlayer {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
-            //COLOCAR ESSA LISTA EM ORDEM ALFABETICA
-            List<String> instruments = Arrays.asList(
-                    "Bass", 
-                    "Drums",
-                    "Guitar", 
-                    "Keyboard",
-                    "a",
-                    "a",
-                    "a",
-                    "a",
-                    "a",
-                    "a",
-                    "a","a","a");
-            
-            new MainFrame(instruments).setVisible(true);
+            try {
+                new MainFrame().setVisible(true);
+            } catch (MidiUnavailableException ex) {
+                Logger.getLogger(TextPlayer.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }
         });
     }
