@@ -368,7 +368,7 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="150"/>
+        <Property name="text" type="java.lang.String" value="120"/>
       </Properties>
     </Component>
     <Component class="java.awt.Button" name="increaseBPM">

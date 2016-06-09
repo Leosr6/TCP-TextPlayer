@@ -5,7 +5,11 @@
  */
 package textplayer;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
 import javax.swing.DefaultListModel;
 /**
  *
@@ -19,10 +23,13 @@ public class MainFrame extends javax.swing.JFrame {
     List<String> instruments;
     Player player;
     
+    private final static int bpmChangeAmount = 5;
+    private final static int defaultBPM = 120;
+    
     public MainFrame(List<String> instrumentlist) {
         instruments = instrumentlist;
         initComponents();
-        player = new Player(bpmLabel);
+        player = new Player();
     }
 
     /**
@@ -149,7 +156,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         bpmLabel.setBackground(new java.awt.Color(255, 255, 255));
         bpmLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        bpmLabel.setText("150");
+        bpmLabel.setText("120");
 
         increaseBPM.setActionCommand("+");
         increaseBPM.setLabel("+");
@@ -316,40 +323,31 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         
-        /* 
-            TO DO: 
-                - fazer tratamento da String song com os /n?
-        */
+        int playerStatus = player.getStatus();
         
-        //"First time" playing => set and play song
-        if (player.isPaused() == false && player.isPlaying() == false)     
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
         {
             textArea.setEditable(false);
             playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
-        
-            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
-            List<String> instruments = ListModelManipulation.toString(used);
-        
-            String song = textArea.getText();
-        
-            player.setInstruments(instruments);
-            player.setSong(song);
-
-            player.play();
+            
+            setPlayer();
+            runPlayer();
+            
+            System.out.println(player.getStatus());
         }
         
-        //Player is paused => resume song
-        else if (player.isPaused() == true)
+        //If player is paused, then resume
+        else if (playerStatus == Player.PAUSED)
         {
             playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
-            player.resume();
+            resumePlayer();
         }
         
-        //Player is playing => pause song
-        else if (player.isPlaying() == true) 
+        //If player is playing, then pause
+        else if (playerStatus == Player.PLAYING) 
         {
             playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png")));
-            player.pause();
+            pausePlayer();
         }
     }//GEN-LAST:event_playButtonActionPerformed
 
@@ -357,10 +355,66 @@ public class MainFrame extends javax.swing.JFrame {
         
         playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/playicon.png")));
         textArea.setEditable(true);
-        player.stop();
+        updateBPMLabel(defaultBPM);
+        stopPlayer();
            
     }//GEN-LAST:event_StopButtonActionPerformed
 
+    private void pausePlayer() {
+        player.pause();
+    }
+
+    private void resumePlayer() {
+        player.resume();
+    }
+
+    private void setPlayer() throws NumberFormatException {
+        
+        List<String> instruments = getInstrumentsList();
+        String song = textArea.getText();
+        int bpm = getBpmAsInt();
+        Sequence sequence = createSequence(instruments, song, bpm);
+        player.setSequence(sequence);
+    }
+
+    private void runPlayer() {
+        try {
+            player.play();
+        } catch (InterruptedException | MidiUnavailableException | InvalidMidiDataException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void stopPlayer() {
+        player.stop();
+    }
+
+    private Sequence createSequence(List<String> instruments1, String song, int bpm) {
+        Sequence sequence = null;
+        try {
+            sequence = SequenceCreator.create(instruments1, song, bpm);
+        }catch (MidiUnavailableException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (InvalidMidiDataException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sequence;
+    }
+
+    private int getBpmAsInt() throws NumberFormatException {
+        //Get bpm from GUI
+        String bpmString = bpmLabel.getText();
+        int bpm = Integer.parseInt(bpmString);
+        return bpm;
+    }
+
+    private List<String> getInstrumentsList() {
+        //Get list of instruments from GUI
+        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        List<String> instruments = ListModelManipulation.toString(used);
+        return instruments;
+    }
+    
     private void addInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInstrumentButtonActionPerformed
 
         DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
@@ -413,22 +467,29 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeInstrumentButtonActionPerformed
 
     private void increaseBPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseBPMActionPerformed
-        if (player.isPlaying() == false)
-            player.increaseBPM(5); 
-        /*
-            TO DO:
-                alterar BPM pelo botão enquanto a música é tocada?
-        */
+        
+        int bpmInteger = getBpmAsInt();
+        bpmInteger += bpmChangeAmount;
+        updateBPMLabel(bpmInteger);
+        
+        if (player.getStatus() != Player.NOT_INITIALIZED)
+            player.increaseBPM(bpmChangeAmount);
+
     }//GEN-LAST:event_increaseBPMActionPerformed
 
     private void lowerBPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowerBPMActionPerformed
-        if (player.isPlaying() == false)
-            player.decreaseBPM(5);
-        /*
-            TO DO:
-                alterar BPM pelo botão enquanto a música é tocada?
-        */
+        
+        int bpmInteger = getBpmAsInt();
+        bpmInteger -= bpmChangeAmount;
+        updateBPMLabel(bpmInteger);
+        
+        if (player.getStatus() != Player.NOT_INITIALIZED)
+            player.decreaseBPM(bpmChangeAmount);
     }//GEN-LAST:event_lowerBPMActionPerformed
+
+    private void updateBPMLabel(int bpmInteger) {
+        bpmLabel.setText(Integer.toString(bpmInteger));
+    }
 
     //Sets the text on jTextArea1
     private void displayText(List<String> text)

@@ -5,8 +5,9 @@
  */
 package textplayer;
 
-import java.util.List;
-import javax.swing.JLabel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.*;
 
 /**
  *
@@ -15,148 +16,97 @@ import javax.swing.JLabel;
 public class Player {
     
     //Constant values
-    private final int defaultBPM = 150;
+    public static final int PLAYING = 0x01;
+    public static final int PAUSED = 0x02;
+    public static final int STOPPED = 0x03;
+    public static final int NOT_INITIALIZED = 0x04;
     
-    private List<String> instruments;
-    private String textSong;
-    private int bpm = defaultBPM; //valor default (mudar?)
-    JLabel bpmLabel = null;
-    boolean playing = false;
-    boolean paused = false;
+    private int status;
     
-    public Player(List<String> instruments, String song)
+    private Synthesizer synth;
+    private Sequencer sequencer;
+    private Sequence sequence;
+    
+    public Player()
     {
-        this.instruments = instruments;
-        this.textSong = song;
+        this.status = NOT_INITIALIZED;
     }
     
-    public Player(JLabel bpmlabel)
+    public Player(Sequence sequence)
     {
-        this.bpmLabel = bpmlabel;
-        updateBPMLabel();
+        this.sequence = sequence;
     }
     
-    public void setInstruments(List<String> instruments)
+    public void setSequence(Sequence sequence)
     {
-        this.instruments = instruments;
+        this.sequence = sequence;
     }
     
-    public List<String> getInstruments()
+    public int getStatus()
     {
-        return this.instruments;
+        return this.status;
     }
     
-    public void setSong(String song)
+    public void setStatus(int status)
     {
-        this.textSong = song;
+        this.status = status;
     }
     
-    public String getSong()
-    {
-        return this.textSong;
-    }
-    
-    public void setBPM(int bpm)
-    {
-        this.bpm = bpm;
-        updateBPMLabel();
-    }
-    
-    public int getBPM()
-    {
-        return this.bpm;
+    private void setSequencer() throws InvalidMidiDataException, MidiUnavailableException {
+        synth = MidiSystem.getSynthesizer();
+        synth.open();
+        sequencer = MidiSystem.getSequencer();
+        sequencer.open();
+        sequencer.setSequence(sequence);
+        
     }
     
     public void increaseBPM(int amount)
     {
-        this.bpm += amount;
-        updateBPMLabel();
+        float bpm = sequencer.getTempoInBPM();
+        bpm += amount;
+        sequencer.setTempoInBPM(bpm);
     }
     
     public void decreaseBPM(int amount)
     {
-        this.bpm -= amount;
-        updateBPMLabel();
+        float bpm = sequencer.getTempoInBPM();
+        bpm -= amount;
+        sequencer.setTempoInBPM(bpm);
     }
     
-    public void updateBPMLabel()
+    public void play() throws InterruptedException, MidiUnavailableException, InvalidMidiDataException
     {
-        if (bpmLabel != null)
-            this.bpmLabel.setText(String.valueOf(bpm));
-    }
-    
-    public boolean isPaused()
-    {
-        return this.paused;
-    }
-    
-    public boolean isPlaying()
-    {
-        return this.playing;
-    }
-    
-    //Debugging function
-    public void printInstruments()
-    {
-        System.out.println("Instruments being used:");
-        for (String s : instruments)
-            System.out.println(s);
-    }
-    
-    //Debugging function
-    public void printSong()
-    {
-        System.out.println("Song:");
-        System.out.println(textSong);
-    }
-    
-    public void play()
-    {
-        /* 
-            TO DO:
-                tudo
-                - iterador que percorre a string da música tem que ser "global"
-                    pro pause funcionar (provavelmente não dessa classe)
-        
-            POSSIVEL BUG: converter os \n da string que nem no save()
-        */
         System.out.println("Playing...");
-        playing = true;
-        paused = false;
+        setStatus(PLAYING);
+        
+        setSequencer();
+        
+        sequencer.start();
     }
     
     public void pause()
     {
-        /*
-            TO DO:
-                tudo
-        */
         System.out.println("Pausing...");
-        playing = false;
-        paused = true;
+        setStatus(PAUSED);
+        
+        sequencer.stop();
     }
     
     public void resume()
     {
-        /*
-            TO DO:
-                tudo
-        */
         System.out.println("Resuming...");
-        paused = false;
-        playing = true;
+        setStatus(PLAYING);
+        
+        sequencer.start();
     }
     
     public void stop()
     {
-        /*
-            TO DO:
-                tudo
-        */
         System.out.println("Stopping...");
-        setBPM(defaultBPM);
-        playing = false;
-        paused = false;
+        setStatus(STOPPED);
+        
+        sequencer.stop();
     }
     
 }
