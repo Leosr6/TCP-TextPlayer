@@ -496,12 +496,7 @@ public class MainFrame extends javax.swing.JFrame {
         bpmInteger += bpmChangeAmount;
         
         if (bpmInteger <= maxBpm)
-        {
             updateBPMLabel(bpmInteger);
-
-            if (player.getStatus() != Player.NOT_INITIALIZED)
-                player.increaseBPM(bpmChangeAmount);
-        }
 
     }//GEN-LAST:event_increaseBPMActionPerformed
 
@@ -511,12 +506,7 @@ public class MainFrame extends javax.swing.JFrame {
         bpmInteger -= bpmChangeAmount;
         
         if (bpmInteger >= minBpm)
-        {
             updateBPMLabel(bpmInteger);
-
-            if (player.getStatus() != Player.NOT_INITIALIZED)
-                player.decreaseBPM(bpmChangeAmount);
-        }
     }//GEN-LAST:event_lowerBPMActionPerformed
 
     private void saveMidiMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMidiMenuActionPerformed

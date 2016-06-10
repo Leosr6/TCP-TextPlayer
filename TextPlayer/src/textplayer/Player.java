@@ -54,20 +54,6 @@ public class Player {
         
     }
     
-    public void increaseBPM(int amount)
-    {
-        float bpm = sequencer.getTempoInBPM();
-        bpm += amount;
-        sequencer.setTempoInBPM(bpm);
-    }
-    
-    public void decreaseBPM(int amount)
-    {
-        float bpm = sequencer.getTempoInBPM();
-        bpm -= amount;
-        sequencer.setTempoInBPM(bpm);
-    }
-    
     public void play() throws InterruptedException, MidiUnavailableException, InvalidMidiDataException
     {
         System.out.println("Playing...");
