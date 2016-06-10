@@ -29,7 +29,7 @@ public class SoundTrack {
     private int octave;
     private int volume;
 
-    SoundTrack(Sequence songSequence, List<Instrument> instruments, int bpm) 
+    public SoundTrack(Sequence songSequence, List<Instrument> instruments, int bpm) 
     {
         songTrack = songSequence.createTrack();
         instrumentsList = instruments;
@@ -93,8 +93,7 @@ public class SoundTrack {
         ShortMessage songShortMessage;
         Random randomGenerator = new Random();
         int randomIndex = randomGenerator.nextInt(instrumentsList.size());
-        int randomInstrument = instrumentsList.get(randomIndex).getPatch().getProgram();
-        
+        int randomInstrument = instrumentsList.get(randomIndex).getPatch().getProgram();        
         songShortMessage = new ShortMessage(ShortMessage.PROGRAM_CHANGE, randomInstrument, 0);
         songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
         songTrack.add(songEvent);    
