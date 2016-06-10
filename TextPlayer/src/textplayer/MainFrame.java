@@ -7,8 +7,8 @@ package textplayer;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.midi.Instrument;
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.swing.DefaultListModel;
@@ -327,14 +327,21 @@ public class MainFrame extends javax.swing.JFrame {
         
         if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
         {
-            textArea.setEditable(false);
-            playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
-            
-            setPlayer();
-            runPlayer();
+            try {
+                textArea.setEditable(false);
+                playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
+                
+                setPlayer();
+                runPlayer();
+            }
+            //If player is paused, then resume
+            catch (NumberFormatException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MidiUnavailableException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
-        //If player is paused, then resume
         else if (playerStatus == Player.PAUSED)
         {
             playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
@@ -366,7 +373,7 @@ public class MainFrame extends javax.swing.JFrame {
         player.resume();
     }
 
-    private void setPlayer() throws NumberFormatException {
+    private void setPlayer() throws NumberFormatException, MidiUnavailableException {
         
         List<String> instruments = getInstrumentsList();
         String song = textArea.getText();
@@ -387,12 +394,11 @@ public class MainFrame extends javax.swing.JFrame {
         player.stop();
     }
 
-    private Sequence createSequence(List<String> instruments1, String song, int bpm) {
+    private Sequence createSequence(List<String> instruments1, String song, int bpm) throws MidiUnavailableException {
         Sequence sequence = null;
+        List<Instrument> inst = InstrumentList.stringToInstrument(instruments1);
         try {
-            sequence = SequenceCreator.create(instruments1, song, bpm);
-        }catch (MidiUnavailableException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            sequence = SoundSequence.createSoundSequence(inst, song, bpm);
         }catch (InvalidMidiDataException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }

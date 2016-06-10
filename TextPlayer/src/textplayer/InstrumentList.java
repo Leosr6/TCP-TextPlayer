@@ -30,10 +30,26 @@ public class InstrumentList {
         }
         
         Collections.sort(instruments);
+        s.close();
         
         return instruments;
         
         
+    }
+    
+    public static List<Instrument> stringToInstrument(List<String> instList) throws MidiUnavailableException
+    {
+        List<Instrument> choosenInstruments = new ArrayList<Instrument>();
+        Synthesizer s = MidiSystem.getSynthesizer();
+        s.open();
+        
+        for (Instrument instrument : s.getLoadedInstruments())
+            if (instList.contains(instrument.getName()))
+                choosenInstruments.add(instrument);
+        
+        s.close();
+                
+        return choosenInstruments;
     }
     
 }
