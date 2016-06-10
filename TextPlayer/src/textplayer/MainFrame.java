@@ -319,10 +319,16 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_helpMenuActionPerformed
 
     private void loadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileMenuActionPerformed
-        List<String> loadedText;
-        loadedText = FileManager.loadFromFile();
-        if (loadedText != null)
-            displayText(loadedText);
+        
+        int playerStatus = player.getStatus();
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
+        {
+            List<String> loadedText;
+            loadedText = FileManager.loadFromFile();
+            if (loadedText != null)
+                displayText(loadedText);
+        }
+        
     }//GEN-LAST:event_loadFileMenuActionPerformed
 
     private void saveTxtMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTxtMenuActionPerformed

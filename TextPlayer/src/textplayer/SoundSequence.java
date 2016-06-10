@@ -18,7 +18,6 @@ public class SoundSequence {
     
     public static Sequence createSoundSequence(List<Instrument> instruments, String textSong, int bpm) throws InvalidMidiDataException
     {
-        
         song = textSong;
         Sequence songSequence = new Sequence(Sequence.PPQ, bpm);
         SoundTrack songTrack = new SoundTrack(songSequence, instruments, bpm);
