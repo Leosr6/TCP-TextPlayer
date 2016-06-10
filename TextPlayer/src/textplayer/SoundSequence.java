@@ -41,7 +41,7 @@ public class SoundSequence {
                     songTrack.addPauseEvent();
                     break;
                 case '?':
-                    songTrack.ResetOctave();
+                    songTrack.resetOctave();
                     break;
                 case '\n':
                     songTrack.addChangeInstrumentEvent();
@@ -65,12 +65,12 @@ public class SoundSequence {
     private static void selectLetterEvent(SoundTrack songTrack, char songChar) throws InvalidMidiDataException 
     {
         int intEquiToNote;
-        intEquiToNote = InputDecodefier.convertCharToInt(songChar);
+        intEquiToNote = InputDecodifier.convertCharToInt(songChar);
         
-        if (InputDecodefier.isVallidNote(intEquiToNote))
+        if (InputDecodifier.isValidNote(intEquiToNote))
             songTrack.addPlayNoteEvent(intEquiToNote);
         else
-            if (InputDecodefier.isVogalLetter(songChar))
+            if (InputDecodifier.isVogalLetter(songChar))
                 songTrack.addDecreaseVolumeEvent();
             else
                 songTrack.addIncreaseBpmEvent();
@@ -79,10 +79,10 @@ public class SoundSequence {
     
     private static void selectNumberEvent(SoundTrack songTrack, int songCharAsNumber) 
     {
-        if (Integer.lowestOneBit(songCharAsNumber) == 1)
-            songTrack.IncreaseOctave();
+        if (songCharAsNumber%2 == 1)
+            songTrack.increaseOctave();
         else
-            songTrack.DecreaseOctave();
+            songTrack.decreaseOctave();
     }
     
     

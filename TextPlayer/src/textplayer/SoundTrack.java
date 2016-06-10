@@ -83,19 +83,19 @@ public class SoundTrack {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void IncreaseOctave() 
+    public void increaseOctave() 
     {
         if (octave < 9)
             octave++;
     }
 
-    public void DecreaseOctave() 
+    public void decreaseOctave() 
     {
         if (octave > -1)
             octave--;
     }
  
-    public void ResetOctave() 
+    public void resetOctave() 
     {
         octave = 4;
     }

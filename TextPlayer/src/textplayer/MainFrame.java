@@ -64,11 +64,11 @@ public class MainFrame extends javax.swing.JFrame {
         lowerBPM = new java.awt.Button();
         menuBar = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
-        LoadFileMenu = new javax.swing.JMenuItem();
-        SaveTxtMenu = new javax.swing.JMenuItem();
-        SaveMidiMenu = new javax.swing.JMenuItem();
+        loadFileMenu = new javax.swing.JMenuItem();
+        saveTxtMenu = new javax.swing.JMenuItem();
+        saveMidiMenu = new javax.swing.JMenuItem();
         HelpMenu = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TextPlayer");
@@ -178,39 +178,44 @@ public class MainFrame extends javax.swing.JFrame {
 
         FileMenu.setText("File");
 
-        LoadFileMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        LoadFileMenu.setText("Load File");
-        LoadFileMenu.addActionListener(new java.awt.event.ActionListener() {
+        loadFileMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        loadFileMenu.setText("Load File");
+        loadFileMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LoadFileMenuActionPerformed(evt);
+                loadFileMenuActionPerformed(evt);
             }
         });
-        FileMenu.add(LoadFileMenu);
+        FileMenu.add(loadFileMenu);
 
-        SaveTxtMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        SaveTxtMenu.setText("Save File");
-        SaveTxtMenu.addActionListener(new java.awt.event.ActionListener() {
+        saveTxtMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveTxtMenu.setText("Save File");
+        saveTxtMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveTxtMenuActionPerformed(evt);
+                saveTxtMenuActionPerformed(evt);
             }
         });
-        FileMenu.add(SaveTxtMenu);
+        FileMenu.add(saveTxtMenu);
 
-        SaveMidiMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        SaveMidiMenu.setText("Save MIDI");
-        FileMenu.add(SaveMidiMenu);
+        saveMidiMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        saveMidiMenu.setText("Save MIDI");
+        saveMidiMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMidiMenuActionPerformed(evt);
+            }
+        });
+        FileMenu.add(saveMidiMenu);
 
         menuBar.add(FileMenu);
 
         HelpMenu.setText("Help");
 
-        jMenuItem4.setText("Read Me");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        helpMenu.setText("Read Me");
+        helpMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                helpMenuActionPerformed(evt);
             }
         });
-        HelpMenu.add(jMenuItem4);
+        HelpMenu.add(helpMenu);
 
         menuBar.add(HelpMenu);
 
@@ -305,21 +310,21 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void helpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_helpMenuActionPerformed
 
-    private void LoadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadFileMenuActionPerformed
+    private void loadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileMenuActionPerformed
         List<String> loadedText;
         loadedText = FileManager.loadFromFile();
         if (loadedText != null)
             displayText(loadedText);
-    }//GEN-LAST:event_LoadFileMenuActionPerformed
+    }//GEN-LAST:event_loadFileMenuActionPerformed
 
-    private void SaveTxtMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveTxtMenuActionPerformed
+    private void saveTxtMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTxtMenuActionPerformed
         String displayedText = textArea.getText();
         FileManager.saveToFile(displayedText);
-    }//GEN-LAST:event_SaveTxtMenuActionPerformed
+    }//GEN-LAST:event_saveTxtMenuActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         
@@ -491,6 +496,22 @@ public class MainFrame extends javax.swing.JFrame {
             player.decreaseBPM(bpmChangeAmount);
     }//GEN-LAST:event_lowerBPMActionPerformed
 
+    private void saveMidiMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMidiMenuActionPerformed
+        
+        List<String> instruments = getInstrumentsList();
+        String song = textArea.getText();
+        int bpm = getBpmAsInt();
+        try 
+        {
+            Sequence sequence = createSequence(instruments, song, bpm);
+            MidiManager.saveMidi(sequence);
+        } 
+        catch (MidiUnavailableException ex) 
+        {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_saveMidiMenuActionPerformed
+
     private void updateBPMLabel(int bpmInteger) {
         bpmLabel.setText(Integer.toString(bpmInteger));
     }
@@ -513,26 +534,26 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenu HelpMenu;
-    private javax.swing.JMenuItem LoadFileMenu;
-    private javax.swing.JMenuItem SaveMidiMenu;
-    private javax.swing.JMenuItem SaveTxtMenu;
     private java.awt.Button addAllInstrumentsButton;
     private java.awt.Button addInstrumentButton;
     private javax.swing.JList<String> availableInstruments;
     private javax.swing.JLabel availableInstrumentsLabel;
     private javax.swing.JLabel bpmLabel;
     private javax.swing.JLabel bpmTitleLabel;
+    private javax.swing.JMenuItem helpMenu;
     private java.awt.Button increaseBPM;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JMenuItem loadFileMenu;
     private java.awt.Button lowerBPM;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton playButton;
     private java.awt.Button removeAllInstrumentsButton;
     private java.awt.Button removeInstrumentButton;
+    private javax.swing.JMenuItem saveMidiMenu;
+    private javax.swing.JMenuItem saveTxtMenu;
     private javax.swing.JButton stopButton;
     private javax.swing.JTextArea textArea;
     private javax.swing.JLabel textAreaLabel;

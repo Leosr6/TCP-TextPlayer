@@ -9,9 +9,9 @@ package textplayer;
  *
  * @author leonardo.rosa
  */
-public class InputDecodefier {
+public class InputDecodifier {
     
-    public static boolean isVallidNote(int intEquiToNote)
+    public static boolean isValidNote(int intEquiToNote)
     {
         return intEquiToNote >= 0;
     }
