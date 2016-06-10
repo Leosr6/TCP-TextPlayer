@@ -15,6 +15,14 @@ import javax.sound.midi.*;
  */
 public class SoundTrack {
     
+    // Constants
+    private final int bpmChangeAmount = 5;
+    private final int minBpm = 5;
+    private final int maxBpm = 300;
+    private final int volumeChangeAmount = 10;
+    private final int minVolume = 0;
+    private final int maxVolume = 127;
+    //
     private final Track songTrack;
     private final List<Instrument> instrumentsList;
     private int BPM; 
@@ -35,9 +43,9 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume <= 117)
+        if (volume < maxVolume)
         {
-            volume = volume + 10;
+            volume = volume + volumeChangeAmount;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
             songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
             songTrack.add(songEvent);
@@ -49,17 +57,23 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume >= 10)
+        if (volume > minVolume)
         {
-            volume = volume - 10;
+            volume = volume - volumeChangeAmount;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
             songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
             songTrack.add(songEvent);   
         }
     }
 
-    public void addPauseEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addPauseEvent() throws InvalidMidiDataException 
+    {
+        MidiEvent songEvent;
+        ShortMessage songShortMessage;
+        
+        songShortMessage = new ShortMessage(ShortMessage.NOTE_OFF, 0, 0);
+        songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+ BPM);
+        songTrack.add(songEvent); 
     }
 
     public void addChangeInstrumentEvent() throws InvalidMidiDataException 
@@ -75,12 +89,16 @@ public class SoundTrack {
         songTrack.add(songEvent);    
     }
     
-    public void addIncreaseBpmEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addIncreaseBpmEvent() 
+    {
+        if (BPM < maxBpm)
+            BPM = BPM + bpmChangeAmount;
     }
 
-    public void addDecreaseBpmEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addDecreaseBpmEvent() 
+    {
+        if (BPM > minBpm)
+            BPM = BPM - bpmChangeAmount;
     }
 
     public void increaseOctave() 

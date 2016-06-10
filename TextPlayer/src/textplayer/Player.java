@@ -5,8 +5,6 @@
  */
 package textplayer;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.*;
 
 /**
@@ -32,11 +30,6 @@ public class Player {
         this.status = NOT_INITIALIZED;
     }
     
-    public Player(Sequence sequence)
-    {
-        this.sequence = sequence;
-    }
-    
     public void setSequence(Sequence sequence)
     {
         this.sequence = sequence;
@@ -52,10 +45,10 @@ public class Player {
         this.status = status;
     }
     
-    private void setSequencer() throws InvalidMidiDataException, MidiUnavailableException {
+    public void setSequencer(Sequencer sequencer) throws InvalidMidiDataException, MidiUnavailableException {
         synth = MidiSystem.getSynthesizer();
         synth.open();
-        sequencer = MidiSystem.getSequencer();
+        this.sequencer = sequencer;
         sequencer.open();
         sequencer.setSequence(sequence);
         
@@ -80,8 +73,6 @@ public class Player {
         System.out.println("Playing...");
         setStatus(PLAYING);
         
-        setSequencer();
-        
         sequencer.start();
     }
     
@@ -103,10 +94,13 @@ public class Player {
     
     public void stop()
     {
-        System.out.println("Stopping...");
-        setStatus(STOPPED);
-        
-        sequencer.stop();
+        if (status != NOT_INITIALIZED)
+        {
+            System.out.println("Stopping...");
+            setStatus(STOPPED);
+
+            sequencer.stop();
+        }
     }
     
 }

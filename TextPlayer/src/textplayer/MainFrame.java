@@ -7,11 +7,10 @@ package textplayer;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.midi.Instrument;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 /**
  *
  * @author Günter Hertz
@@ -26,6 +25,8 @@ public class MainFrame extends javax.swing.JFrame {
     
     private final static int bpmChangeAmount = 5;
     private final static int defaultBPM = 120;
+    private final static int maxBpm = 300;
+    private final static int minBpm = 5;
     
     public MainFrame() throws MidiUnavailableException {
         instruments = InstrumentList.get();
@@ -332,19 +333,26 @@ public class MainFrame extends javax.swing.JFrame {
         
         if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
         {
-            try {
-                textArea.setEditable(false);
-                playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
-                
-                setPlayer();
-                runPlayer();
+            if (getInstrumentsList().size() > 0)
+            {
+                try {
+                    textArea.setEditable(false);
+                    playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
+
+                    setPlayer();
+                    runPlayer();
+                }
+                //If player is paused, then resume
+                catch (NumberFormatException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MidiUnavailableException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidMidiDataException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            //If player is paused, then resume
-            catch (NumberFormatException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MidiUnavailableException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            else
+                JOptionPane.showMessageDialog(null, "Choose at least one instrument.", "Error", ERROR_MESSAGE);
         }
         
         else if (playerStatus == Player.PAUSED)
@@ -378,13 +386,18 @@ public class MainFrame extends javax.swing.JFrame {
         player.resume();
     }
 
-    private void setPlayer() throws NumberFormatException, MidiUnavailableException {
+    private void setPlayer() throws NumberFormatException, MidiUnavailableException, InvalidMidiDataException {
         
         List<String> instruments = getInstrumentsList();
         String song = textArea.getText();
         int bpm = getBpmAsInt();
+        Sequencer sequencer = MidiSystem.getSequencer();
         Sequence sequence = createSequence(instruments, song, bpm);
+        
+        sequencer.addMetaEventListener(new MetaEventListener()
+        {public void meta(MetaMessage msg) {stopButtonActionPerformed(null); }});
         player.setSequence(sequence);
+        player.setSequencer(sequencer);
     }
 
     private void runPlayer() {
@@ -479,10 +492,14 @@ public class MainFrame extends javax.swing.JFrame {
         
         int bpmInteger = getBpmAsInt();
         bpmInteger += bpmChangeAmount;
-        updateBPMLabel(bpmInteger);
         
-        if (player.getStatus() != Player.NOT_INITIALIZED)
-            player.increaseBPM(bpmChangeAmount);
+        if (bpmInteger <= maxBpm)
+        {
+            updateBPMLabel(bpmInteger);
+
+            if (player.getStatus() != Player.NOT_INITIALIZED)
+                player.increaseBPM(bpmChangeAmount);
+        }
 
     }//GEN-LAST:event_increaseBPMActionPerformed
 
@@ -490,10 +507,14 @@ public class MainFrame extends javax.swing.JFrame {
         
         int bpmInteger = getBpmAsInt();
         bpmInteger -= bpmChangeAmount;
-        updateBPMLabel(bpmInteger);
         
-        if (player.getStatus() != Player.NOT_INITIALIZED)
-            player.decreaseBPM(bpmChangeAmount);
+        if (bpmInteger >= minBpm)
+        {
+            updateBPMLabel(bpmInteger);
+
+            if (player.getStatus() != Player.NOT_INITIALIZED)
+                player.decreaseBPM(bpmChangeAmount);
+        }
     }//GEN-LAST:event_lowerBPMActionPerformed
 
     private void saveMidiMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMidiMenuActionPerformed
