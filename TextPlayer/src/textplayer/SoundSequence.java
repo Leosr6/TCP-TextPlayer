@@ -47,8 +47,10 @@ public class SoundSequence {
                     songTrack.addChangeInstrumentEvent();
                     break;
                 case ';':
-                    songTrack.addDecreaseBpmEvent();
+                    songTrack.decreaseBpm();
                     break;
+                case ',':
+                    songTrack.addResetVolumeEvent();
                 default:
                     if (Character.isLetter(songChar))
                         selectLetterEvent(songTrack, Character.toLowerCase(songChar));
@@ -73,7 +75,7 @@ public class SoundSequence {
             if (InputDecodifier.isVogalLetter(songChar))
                 songTrack.addDecreaseVolumeEvent();
             else
-                songTrack.addIncreaseBpmEvent();
+                songTrack.increaseBpm();
         
     }
     

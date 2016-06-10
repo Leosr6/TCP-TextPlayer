@@ -21,7 +21,7 @@ public class SoundTrack {
     private final int maxBpm = 300;
     private final int volumeChangeAmount = 10;
     private final int minVolume = 0;
-    private final int maxVolume = 127;
+    private final int maxVolume = 120;
     //
     private final Track songTrack;
     private final List<Instrument> instrumentsList;
@@ -65,6 +65,17 @@ public class SoundTrack {
             songTrack.add(songEvent);   
         }
     }
+    
+    public void addResetVolumeEvent() throws InvalidMidiDataException
+    {   
+        MidiEvent songEvent;
+        ShortMessage songShortMessage;
+        
+        volume = 100;
+        songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
+        songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
+        songTrack.add(songEvent);  
+    }
 
     public void addPauseEvent() throws InvalidMidiDataException 
     {
@@ -89,13 +100,13 @@ public class SoundTrack {
         songTrack.add(songEvent);    
     }
     
-    public void addIncreaseBpmEvent() 
+    public void increaseBpm() 
     {
         if (BPM < maxBpm)
             BPM = BPM + bpmChangeAmount;
     }
 
-    public void addDecreaseBpmEvent() 
+    public void decreaseBpm() 
     {
         if (BPM > minBpm)
             BPM = BPM - bpmChangeAmount;
