@@ -100,13 +100,13 @@ public class SoundTrack {
         songTrack.add(songEvent);    
     }
     
-    public void increaseBpm() 
+    public void decreaseBpm() 
     {
         if (BPM < MAX_BPM)
             BPM = BPM + BPM_CHANGE_AMOUNT;
     }
 
-    public void decreaseBpm() 
+    public void increaseBpm() 
     {
         if (BPM > MIN_BPM)
             BPM = BPM - BPM_CHANGE_AMOUNT;
