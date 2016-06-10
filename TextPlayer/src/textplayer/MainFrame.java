@@ -28,10 +28,13 @@ public class MainFrame extends javax.swing.JFrame {
     private final static int maxBpm = SoundTrack.MAX_BPM;
     private final static int minBpm = SoundTrack.MIN_BPM;
     
+    private final HelpForm helpForm;
+    
     public MainFrame() throws MidiUnavailableException {
         instruments = InstrumentList.get();
         initComponents();
         player = new Player();
+        helpForm = new HelpForm();
     }
 
     /**
@@ -312,11 +315,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void helpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuActionPerformed
-        // TODO add your handling code here:
-        //System.out.println(System.getProperty("user.dir"));
-        List<String> readme = FileManager.loadFileByName("readme.txt");
-        TxtDisplayer.display(readme, "Help");
-        
+        helpForm.setVisible(true);
     }//GEN-LAST:event_helpMenuActionPerformed
 
     private void loadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileMenuActionPerformed
