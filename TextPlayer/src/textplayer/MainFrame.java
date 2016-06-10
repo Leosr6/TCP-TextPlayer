@@ -447,53 +447,68 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void addInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInstrumentButtonActionPerformed
 
-        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
-        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();       
+        int playerStatus = player.getStatus();
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
+        {
+            DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();       
 
-        String selectedInstrument = availableInstruments.getSelectedValue(); 
-        List<DefaultListModel> updatedModels;
-        updatedModels = ListModelManipulation.moveElement(available, used, selectedInstrument);
+            String selectedInstrument = availableInstruments.getSelectedValue(); 
+            List<DefaultListModel> updatedModels;
+            updatedModels = ListModelManipulation.moveElement(available, used, selectedInstrument);
         
-        availableInstruments.setModel(updatedModels.get(0));
-        usedInstruments.setModel(updatedModels.get(1));
-        
+            availableInstruments.setModel(updatedModels.get(0));
+            usedInstruments.setModel(updatedModels.get(1));
+        }  
     }//GEN-LAST:event_addInstrumentButtonActionPerformed
 
     private void addAllInstrumentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAllInstrumentsButtonActionPerformed
         
-        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
-        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        int playerStatus = player.getStatus();
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
+        {
+            DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
         
-        List<DefaultListModel> updatedModels;
-        updatedModels = ListModelManipulation.moveAllElements(available, used);
+            List<DefaultListModel> updatedModels;
+            updatedModels = ListModelManipulation.moveAllElements(available, used);
         
-        availableInstruments.setModel(updatedModels.get(0));
-        usedInstruments.setModel(updatedModels.get(1));
-        
+            availableInstruments.setModel(updatedModels.get(0));
+            usedInstruments.setModel(updatedModels.get(1));
+        }
     }//GEN-LAST:event_addAllInstrumentsButtonActionPerformed
 
     private void removeAllInstrumentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllInstrumentsButtonActionPerformed
         
-        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
-        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
+        int playerStatus = player.getStatus();
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
+        {
+            DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
         
-        List<DefaultListModel> updatedModels;
-        updatedModels = ListModelManipulation.moveAllElements(used, available);
+            List<DefaultListModel> updatedModels;
+            updatedModels = ListModelManipulation.moveAllElements(used, available);
         
-        availableInstruments.setModel(updatedModels.get(1));
-        usedInstruments.setModel(updatedModels.get(0));
+            availableInstruments.setModel(updatedModels.get(1));
+            usedInstruments.setModel(updatedModels.get(0));
+        }
     }//GEN-LAST:event_removeAllInstrumentsButtonActionPerformed
 
     private void removeInstrumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeInstrumentButtonActionPerformed
-        DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
-        DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
         
-        String selectedInstrument = usedInstruments.getSelectedValue(); 
-        List<DefaultListModel> updatedModels;
-        updatedModels = ListModelManipulation.moveElement(used, available, selectedInstrument);
+        int playerStatus = player.getStatus();
+        if (playerStatus == Player.STOPPED || playerStatus == Player.NOT_INITIALIZED)
+        {
+            DefaultListModel available = (DefaultListModel) availableInstruments.getModel();
+            DefaultListModel used = (DefaultListModel) usedInstruments.getModel();
         
-        availableInstruments.setModel(updatedModels.get(1));
-        usedInstruments.setModel(updatedModels.get(0));
+            String selectedInstrument = usedInstruments.getSelectedValue(); 
+            List<DefaultListModel> updatedModels;
+            updatedModels = ListModelManipulation.moveElement(used, available, selectedInstrument);
+        
+            availableInstruments.setModel(updatedModels.get(1));
+            usedInstruments.setModel(updatedModels.get(0));
+        }
     }//GEN-LAST:event_removeInstrumentButtonActionPerformed
 
     private void increaseBPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseBPMActionPerformed
