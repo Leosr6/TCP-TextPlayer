@@ -23,10 +23,10 @@ public class MainFrame extends javax.swing.JFrame {
     List<String> instruments;
     Player player;
     
-    private final static int bpmChangeAmount = 5;
+    private final static int bpmChangeAmount = SoundTrack.BPM_CHANGE_AMOUNT;
     private final static int defaultBPM = 120;
-    private final static int maxBpm = 300;
-    private final static int minBpm = 5;
+    private final static int maxBpm = SoundTrack.MAX_BPM;
+    private final static int minBpm = SoundTrack.MIN_BPM;
     
     public MainFrame() throws MidiUnavailableException {
         instruments = InstrumentList.get();
@@ -313,6 +313,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void helpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuActionPerformed
         // TODO add your handling code here:
+        //System.out.println(System.getProperty("user.dir"));
+        List<String> readme = FileManager.loadFileByName("readme.txt");
+        TxtDisplayer.display(readme, "Help");
+        
     }//GEN-LAST:event_helpMenuActionPerformed
 
     private void loadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileMenuActionPerformed
@@ -335,7 +339,8 @@ public class MainFrame extends javax.swing.JFrame {
         {
             if (getInstrumentsList().size() > 0)
             {
-                try {
+                try 
+                {
                     textArea.setEditable(false);
                     playButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/textplayer/pauseicon.png")));
 
@@ -343,11 +348,8 @@ public class MainFrame extends javax.swing.JFrame {
                     runPlayer();
                 }
                 //If player is paused, then resume
-                catch (NumberFormatException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MidiUnavailableException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvalidMidiDataException ex) {
+                catch (NumberFormatException | MidiUnavailableException | InvalidMidiDataException ex) 
+                {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -394,8 +396,9 @@ public class MainFrame extends javax.swing.JFrame {
         Sequencer sequencer = MidiSystem.getSequencer();
         Sequence sequence = createSequence(instruments, song, bpm);
         
-        sequencer.addMetaEventListener(new MetaEventListener()
-        {public void meta(MetaMessage msg) {stopButtonActionPerformed(null); }});
+        sequencer.addMetaEventListener((MetaMessage msg) -> {
+            stopButtonActionPerformed(null);
+        });
         player.setSequence(sequence);
         player.setSequencer(sequencer);
     }

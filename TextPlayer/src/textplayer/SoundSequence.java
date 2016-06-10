@@ -29,6 +29,7 @@ public class SoundSequence {
     
     private static void createEvents(SoundTrack songTrack) throws InvalidMidiDataException
     {
+        songTrack.addChangeInstrumentEvent();
         
         for (char songChar:song.toCharArray())
         {

@@ -101,5 +101,11 @@ public class FileManager {
             return false;
         }
     }
+    
+    public static List<String> loadFileByName(String filename)
+    {
+        handler = new File(filename);
+        return read();
+    }
           
 }

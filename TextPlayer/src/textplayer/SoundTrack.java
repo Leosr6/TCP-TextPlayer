@@ -16,9 +16,9 @@ import javax.sound.midi.*;
 public class SoundTrack {
     
     // Constants
-    private final int bpmChangeAmount = 5;
-    private final int minBpm = 5;
-    private final int maxBpm = 300;
+    public static final int BPM_CHANGE_AMOUNT = 5;
+    public static final int MIN_BPM = 5;
+    public static final int MAX_BPM = 300;
     private final int volumeChangeAmount = 10;
     private final int minVolume = 0;
     private final int maxVolume = 120;
@@ -102,14 +102,14 @@ public class SoundTrack {
     
     public void increaseBpm() 
     {
-        if (BPM < maxBpm)
-            BPM = BPM + bpmChangeAmount;
+        if (BPM < MAX_BPM)
+            BPM = BPM + BPM_CHANGE_AMOUNT;
     }
 
     public void decreaseBpm() 
     {
-        if (BPM > minBpm)
-            BPM = BPM - bpmChangeAmount;
+        if (BPM > MIN_BPM)
+            BPM = BPM - BPM_CHANGE_AMOUNT;
     }
 
     public void increaseOctave() 
