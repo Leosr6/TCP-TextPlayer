@@ -16,11 +16,11 @@ public class SoundSequence {
     
     private static String song;
     
-    public static Sequence createSoundSequence(List<Instrument> instruments, String textSong, int bpm) throws InvalidMidiDataException
+    public static Sequence createSoundSequence(List<Instrument> instruments, String textSong) throws InvalidMidiDataException
     {
         song = textSong;
-        Sequence songSequence = new Sequence(Sequence.PPQ, bpm);
-        SoundTrack songTrack = new SoundTrack(songSequence, instruments, bpm);
+        Sequence songSequence = new Sequence(Sequence.PPQ, SoundTrack.DEFAULT_BPM);
+        SoundTrack songTrack = new SoundTrack(songSequence, instruments);
         createEvents(songTrack);
         
         return songSequence;

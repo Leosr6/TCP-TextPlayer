@@ -23,13 +23,17 @@ public class InstrumentList {
     {
         List<String> instruments = new ArrayList<String>();
         Synthesizer s = MidiSystem.getSynthesizer();
+        String instrumentName;
         s.open();
         for (Instrument instrument : s.getLoadedInstruments())
         {
-            instruments.add(instrument.getName());
+            instrumentName = instrument.getName();
+            if (!instruments.contains(instrumentName))
+                instruments.add(instrumentName);
         }
         
         Collections.sort(instruments);
+        
         s.close();
         
         return instruments;

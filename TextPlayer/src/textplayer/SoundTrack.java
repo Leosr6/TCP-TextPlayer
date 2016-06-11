@@ -19,9 +19,13 @@ public class SoundTrack {
     public static final int BPM_CHANGE_AMOUNT = 5;
     public static final int MIN_BPM = 5;
     public static final int MAX_BPM = 300;
-    private final int volumeChangeAmount = 10;
-    private final int minVolume = 0;
-    private final int maxVolume = 120;
+    public static final int DEFAULT_BPM = 120;
+    public static final int DEFAULT_VOLUME = 63;
+    public static final int DEFAULT_OCTAVE = 4;
+    
+    public static final int VOLUME_CHANGE_AMOUNT = 10;
+    public static final int MIN_VOLUME = 0;
+    public static final int MAX_VOLUME = 120;
     //
     private final Track songTrack;
     private final List<Instrument> instrumentsList;
@@ -29,13 +33,13 @@ public class SoundTrack {
     private int octave;
     private int volume;
 
-    public SoundTrack(Sequence songSequence, List<Instrument> instruments, int bpm) 
+    public SoundTrack(Sequence songSequence, List<Instrument> instruments) 
     {
         songTrack = songSequence.createTrack();
         instrumentsList = instruments;
-        BPM = bpm;
-        octave = 4;
-        volume = 100;
+        BPM = DEFAULT_BPM;
+        octave = DEFAULT_OCTAVE;
+        volume = DEFAULT_VOLUME;
     }
     
     public void addIncreaseVolumeEvent() throws InvalidMidiDataException
@@ -43,9 +47,9 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume < maxVolume)
+        if (volume < MAX_VOLUME)
         {
-            volume = volume + volumeChangeAmount;
+            volume = volume + VOLUME_CHANGE_AMOUNT;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
             songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
             songTrack.add(songEvent);
@@ -57,9 +61,9 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume > minVolume)
+        if (volume > MIN_VOLUME)
         {
-            volume = volume - volumeChangeAmount;
+            volume = volume - VOLUME_CHANGE_AMOUNT;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
             songEvent = new MidiEvent(songShortMessage, songTrack.ticks()+1);
             songTrack.add(songEvent);   
