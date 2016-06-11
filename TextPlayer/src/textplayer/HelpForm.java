@@ -6,6 +6,7 @@
 package textplayer;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,11 +14,19 @@ import java.util.List;
  */
 public class HelpForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form HelpForm
-     */
+    public static final int ENABLED = 0x01;
+    public static final int DISABLED = 0x02;
+    
+    private int status;
+    
+    
     public HelpForm() {
         initComponents();
+    }
+    
+    public int getStatus()
+    {
+        return status;
     }
 
     /**
@@ -34,76 +43,60 @@ public class HelpForm extends javax.swing.JFrame {
         setTitle("Help Me");
         setResizable(false);
 
-        jLabel1.setText(displayHelpText());
+        String displayText = displayHelpText();
+        if (displayText != null)
+		{
+			jLabel1.setText(displayHelpText());
+			status = ENABLED;
+        
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
-        );
+			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+			getContentPane().setLayout(layout);
+			layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(8, 8, 8)
+					.addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+					.addGap(8, 8, 8))
+			);
+			layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(15, 15, 15)
+					.addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+					.addGap(15, 15, 15))
+				);
 
-        pack();
+			pack();
+		}
+		
+		else
+		{
+			JOptionPane.showMessageDialog(null,
+				"Help function disabled.",
+				"Error",
+				JOptionPane.ERROR_MESSAGE);
+			status = DISABLED;
+		}
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HelpForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HelpForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HelpForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HelpForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HelpForm().setVisible(true);
-            }
-        });
-    }
     
     private String displayHelpText()
     {
-        List<String> readme = FileManager.loadFileByName("readme.txt");
+        List<String> readme = FileManager.loadFileByName("help.txt");
         
-        String displayed =  "<html>";
-        for (String s : readme)
+        if (readme != null) 
         {
-            displayed += s;
-            displayed += "<br>";
+            String displayed =  "<html>";
+            for (String s : readme)
+            {
+                displayed += s;
+                displayed += "<br>";
+            }
+            displayed += "</html>";
+            
+            return displayed;
         }
-        displayed += "</html>";
-        
-        return displayed;
+        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

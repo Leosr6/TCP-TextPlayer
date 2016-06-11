@@ -262,7 +262,13 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void helpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuActionPerformed
-        helpForm.setVisible(true);
+        if (helpForm.getStatus() == HelpForm.ENABLED)
+            helpForm.setVisible(true);
+        else
+            JOptionPane.showMessageDialog(null,
+				"Help function disabled.",
+				"Error",
+				JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_helpMenuActionPerformed
 
     private void loadFileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileMenuActionPerformed

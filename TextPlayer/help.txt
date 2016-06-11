@@ -13,7 +13,7 @@ Select the instruments you want to be played.
 
 Step 3:
 
-Set the initial BPM of the song (you may change it later).
+Play or save song.
 
 
 Commands:

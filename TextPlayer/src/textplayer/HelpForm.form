@@ -48,6 +48,10 @@
           <Connection code="displayHelpText()" type="code"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="else&#xa;    JOptionPane.showMessageDialog(null,&#xa;                    &quot;&apos;readme.txt&apos; couldn&apos;t be loaded.\nHelp function disabled.&quot;,&#xa;                    &quot;Error&quot;,&#xa;                    JOptionPane.ERROR_MESSAGE);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="String displayText = displayHelpText();&#xa;if (displayText != null)"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
