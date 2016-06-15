@@ -5,8 +5,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.*;
@@ -102,10 +107,52 @@ public class FileManager {
         }
     }
     
+    private static boolean write(Sequence sequence)
+    {
+        try {
+            MidiSystem.write(sequence, MidiSystem.getMidiFileTypes()[0], handler);
+            return true;
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
     public static List<String> loadFileByName(String filename)
     {
         handler = new File(filename);
         return read();
     }
+    
+    public static void saveMidi(Sequence sequence)
+    {
+        JFileChooser chooser = new JFileChooser();
+        int chosen = chooser.showSaveDialog(null);
+        if (chosen == JFileChooser.APPROVE_OPTION)
+        {
+            handler = chooser.getSelectedFile();
+            //If file with selected name doesn't already exists, 
+            //appends '.txt' to the selected file name.
+            if (!handler.exists()) 
+                handler = new File(chooser.getSelectedFile() + ".mid");
+            boolean success = write(sequence);
+            if (success)
+            {
+                JOptionPane.showMessageDialog(null,
+                        "Midi saved.");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,
+                        "Error saving midi.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }    
+    }
+    
+    
           
 }

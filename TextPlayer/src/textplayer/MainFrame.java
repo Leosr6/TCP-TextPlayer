@@ -179,6 +179,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         HelpMenu.setText("Help");
 
+        helpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SLASH, java.awt.event.InputEvent.CTRL_MASK));
         helpMenu.setText("Read Me");
         helpMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -360,9 +361,12 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void runPlayer() {
-        try {
+        try 
+        {
             player.play();
-        } catch (InterruptedException | MidiUnavailableException | InvalidMidiDataException ex) {
+        } 
+        catch (InterruptedException | MidiUnavailableException | InvalidMidiDataException ex) 
+        {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -374,9 +378,12 @@ public class MainFrame extends javax.swing.JFrame {
     private Sequence createSequence(List<String> instruments1, String song) throws MidiUnavailableException {
         Sequence sequence = null;
         List<Instrument> inst = InstrumentList.stringToInstrument(instruments1);
-        try {
+        try 
+        {
             sequence = SoundSequence.createSoundSequence(inst, song);
-        }catch (InvalidMidiDataException ex) {
+        }
+        catch (InvalidMidiDataException ex) 
+        {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sequence;
@@ -459,15 +466,20 @@ public class MainFrame extends javax.swing.JFrame {
         
         List<String> instruments = getInstrumentsList();
         String song = textArea.getText();
-        try 
+        if (getInstrumentsList().size() > 0)
         {
-            Sequence sequence = createSequence(instruments, song);
-            MidiManager.saveMidi(sequence);
-        } 
-        catch (MidiUnavailableException ex) 
-        {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            try 
+            {
+                Sequence sequence = createSequence(instruments, song);
+                FileManager.saveMidi(sequence);
+            } 
+            catch (MidiUnavailableException ex) 
+            {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        else
+            JOptionPane.showMessageDialog(null, "Choose at least one instrument.", "Error", ERROR_MESSAGE);
     }//GEN-LAST:event_saveMidiMenuActionPerformed
 
     //Sets the text on jTextArea1
