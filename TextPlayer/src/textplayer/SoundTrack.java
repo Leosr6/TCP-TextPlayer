@@ -47,7 +47,7 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume < MAX_VOLUME)
+        if (volume + VOLUME_CHANGE_AMOUNT < MAX_VOLUME)
         {
             volume = volume + VOLUME_CHANGE_AMOUNT;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
@@ -61,7 +61,7 @@ public class SoundTrack {
         MidiEvent songEvent;
         ShortMessage songShortMessage;
         
-        if (volume > MIN_VOLUME)
+        if (volume - VOLUME_CHANGE_AMOUNT > MIN_VOLUME)
         {
             volume = volume - VOLUME_CHANGE_AMOUNT;
             songShortMessage = new ShortMessage(ShortMessage.CONTROL_CHANGE, 7, volume);
